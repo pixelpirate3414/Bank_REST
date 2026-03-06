@@ -1,0 +1,184 @@
+components:
+  schemas:
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор пользователя
+        userName:
+          type: string
+          description: Имя пользователя
+        role:
+          $ref: '#/components/schemas/UserRole'
+      required:
+        - id
+        - userName
+        - role
+
+    UserRole:
+      type: string
+      enum:
+        - ADMIN
+        - USER
+      description: Роль пользователя в системе
+
+    CardDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор карты
+        maskedNumber:
+          type: string
+          description: Маскированный номер карты **** **** **** 1234
+        status:
+          $ref: '#/components/schemas/CardStatus'
+        balance:
+          type: number
+          format: double
+          description: Баланс карты
+      required:
+        - id
+        - maskedNumber
+        - status
+        - balance
+
+    CardStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - BLOCKED
+        - EXPIRED
+      description: Статус карты
+
+    CardRequestDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор заявки
+        maskedNumber:
+          type: string
+          description: Маскированный номер карты, к которой относится заявка
+        requestorId:
+          type: integer
+          format: int64
+          description: Идентификатор пользователя, создавшего заявку
+        requestType:
+          $ref: '#/components/schemas/CardRequestType'
+        createdAt:
+          type: string
+          format: date-time
+          description: Дата и время создания заявки
+        processedAt:
+          type: string
+          format: date-time
+          description: Дата и время обработки заявки
+      required:
+        - id
+        - maskedNumber
+        - requestorId
+        - requestType
+        - createdAt
+
+    CardRequestType:
+      type: string
+      enum:
+        - BLOCK
+        - REACTIVATE
+      description: Тип заявки на карту
+
+    TransferDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор перевода
+        fromCard:
+          $ref: '#/components/schemas/CardTransferDto'
+          description: Карта отправителя
+        toCard:
+          $ref: '#/components/schemas/CardTransferDto'
+          description: Карта получателя
+        amount:
+          type: number
+          format: double
+          description: Сумма перевода
+        operationDate:
+          type: string
+          format: date-time
+          description: Дата и время операции
+      required:
+        - id
+        - fromCard
+        - toCard
+        - amount
+        - operationDate
+
+    CardTransferDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор карты в переводе
+        maskedNumber:
+          type: string
+          description: Маскированный номер карты
+      required:
+        - id
+        - maskedNumber
+
+    CardAdminDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор карты
+        maskedNumber:
+          type: string
+          description: Маскированный номер карты
+        status:
+          $ref: '#/components/schemas/CardStatus'
+        balance:
+          type: number
+          format: double
+          description: Баланс карты
+        owner:
+          $ref: '#/components/schemas/UserDto'
+          description: Владелец карты
+      required:
+        - id
+        - maskedNumber
+        - status
+        - balance
+        - owner
+
+    UserAdminDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор пользователя
+        userName:
+          type: string
+          description: Имя пользователя
+        role:
+          $ref: '#/components/schemas/UserRole'
+        cards:
+          type: array
+          description: Список карт пользователя
+          items:
+            $ref: '#/components/schemas/CardDto'
+      required:
+        - id
+        - userName
+        - role
+        - cards

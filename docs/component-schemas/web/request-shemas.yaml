@@ -1,0 +1,46 @@
+components:
+  schemas:
+    AuthRequest:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: Имя пользователя
+        password:
+          type: string
+          description: Пароль
+          minLength: 1
+      required:
+        - userName
+        - password
+
+    TransferRequest:
+      type: object
+      properties:
+        fromUserId:
+          type: integer
+          format: int64
+          description: Идентификатор отправителя (пользователь)
+        toUserId:
+          type: integer
+          format: int64
+          description: Идентификатор получателя (пользователь)
+        fromCardId:
+          type: integer
+          format: int64
+          description: Идентификатор карты отправителя
+        toCardId:
+          type: integer
+          format: int64
+          description: Идентификатор карты получателя
+        amount:
+          type: number
+          format: double
+          description: Сумма перевода
+          minimum: 0
+      required:
+        - fromUserId
+        - toUserId
+        - fromCardId
+        - toCardId
+        - amount

@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: init
+      author: pixelpirate
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: users
+              tableName: cards
+              tableName: transfers
+              tableName: card_requests
+      changes:
+        - sqlFile:
+            path: db.migration/scripts/init.sql
+            encoding: UTF-8
+
+  - changeSet:
+      id: seed
+      author: pixelpirate
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM users WHERE username = 'test_usr'
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM users WHERE username = 'test_admin'
+        - sqlCheck:
+            expectedResult: "0"
+            sql: SELECT COUNT(*) FROM cards WHERE masked_number = '**** **** **** 0336'
+      changes:
+        - sqlFile:
+            path: db.migration/scripts/seed.sql
+            encoding: UTF-8

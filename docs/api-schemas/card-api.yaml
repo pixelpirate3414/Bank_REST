@@ -1,0 +1,178 @@
+openapi: 3.1.3
+info:
+  title: User Card API
+  version: 1.0.0
+
+servers:
+  - url: /{apiVersion}
+    variables:
+      apiVersion:
+        default: v1
+
+paths:
+  /cards/{cardId}:
+    get:
+      tags:
+        - User
+      summary: View user card
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User card
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/dto/dto-schemas.yaml#/components/schemas/CardDto'
+        '401':
+          description: Неавторизован
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/SecurityResponse'
+        '404':
+          description: Карты не существует
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/ExceptionResponse'
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/ExceptionResponse'
+
+  /cards:
+    get:
+      tags:
+        - User
+      summary: View all user cards (paged)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+        - name: size
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Paged cards
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/dto/dto-schemas.yaml#/components/schemas/CardDto'
+        '401':
+          description: Неавторизован
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/SecurityResponse'
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/ExceptionResponse'
+
+  /cards/{cardId}/block-request:
+    post:
+      tags:
+        - User
+      summary: Request card block
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Block request response
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/CardStatusResponse'
+        '401':
+          description: Неавторизован
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/SecurityResponse'
+        '404':
+          description: Карты не существует
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/ExceptionResponse'
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/ExceptionResponse'
+
+  /cards/{cardId}/reactivation-request:
+    post:
+      tags:
+        - User
+      summary: Request card block
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Block request response
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/CardStatusResponse'
+        '401':
+          description: Неавторизован
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/SecurityResponse'
+        '404':
+          description: Карты не существует
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/ExceptionResponse'
+        '400':
+          description: Ошибка валидации данных
+          content:
+            application/json:
+              schema:
+                $ref: '../component-schemas/web/response-shemas.yaml#/components/schemas/ExceptionResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

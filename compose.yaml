@@ -1,0 +1,44 @@
+services:
+  postgres:
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres_usr" ]
+      interval: 10s
+      retries: 5
+    image: postgres:18
+    volumes:
+      - bank_data:/var/lib/postgresql/
+    container_name: bank_db
+    environment:
+      POSTGRES_DB: bank_rest
+      POSTGRES_USER: ${POSTGRES_ROOT_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_ROOT_PWD}
+    ports:
+      - "5432:5432"
+    networks:
+      - bank-rest
+
+  app:
+    build: .
+    container_name: bank_app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bank_rest
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_ROOT_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_ROOT_PWD}
+
+      SECURITY_JWT_SECRET: ${JWT_SECRET}
+      SECURITY_CARD_SECRET: ${CARD_SECRET}
+      SECURITY_TOKEN_LIFETIME: ${TOKEN_LIFETIME}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    networks:
+      - bank-rest
+
+volumes:
+  bank_data:
+
+networks:
+  bank-rest:
+    driver: bridge

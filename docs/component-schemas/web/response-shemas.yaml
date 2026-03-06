@@ -1,0 +1,91 @@
+components:
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        jwt:
+          type: string
+          description: JWT-токен для авторизации
+      required:
+        - jwt
+
+    CardBalanceResponse:
+      type: object
+      properties:
+        maskedNumber:
+          type: string
+          description: Маскированный номер карты
+        balance:
+          type: number
+          format: double
+          description: Баланс карты
+      required:
+        - maskedNumber
+        - balance
+
+    CardStatusResponse:
+      type: object
+      properties:
+        maskedNumber:
+          type: string
+          description: Маскированный номер карты
+        cardStatus:
+          $ref: '#/components/schemas/CardStatus'
+      required:
+        - maskedNumber
+        - cardStatus
+
+    CardStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - BLOCKED
+        - EXPIRED
+      description: Статус карты
+
+    ExceptionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: HTTP статус ошибки
+          example: 500
+        message:
+          type: string
+          description: Сообщение об ошибке
+          example: "Internal Server Error"
+        details:
+          type: string
+          description: Детали ошибки
+          example: "Invalid data provided"
+        url:
+          type: string
+          description: URL запроса, вызвавшего ошибку
+          example: "/api/resource"
+        timestamp:
+          type: string
+          format: date-time
+          description: Время возникновения ошибки
+          example: "2025-03-06T12:30:45"
+      required:
+        - status
+        - message
+        - details
+        - url
+        - timestamp
+
+    SecurityResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 401
+        error:
+          type: string
+          example: "Unauthorized"
+        message:
+          type: string
+          example: "Full authentication is required to access this resource"
+        path:
+          type: string
+          example: "/auth/sign-up"

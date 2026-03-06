@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: Bank_REST
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  liquibase:
+    change-log: classpath:db.migration/liquibase.yml
+
+server:
+  port: 8080
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    url: /docs/openapi.yaml
+
+security:
+  jwt:
+    secrete: ${SECURITY_JWT_SECRET}
+  card:
+    secrete: ${SECURITY_CARD_SECRET}
+  token:
+    lifetime: ${SECURITY_TOKEN_LIFETIME}
+
+app:
+  scheduling:
+    card-expiration-cron: "0 0 2 * * *"
+  api:
+    version: "/api/v1"
