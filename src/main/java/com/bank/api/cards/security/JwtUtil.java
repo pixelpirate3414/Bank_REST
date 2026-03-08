@@ -11,10 +11,8 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 /**
- * A utility class providing methods for working with JSON Web Tokens (JWT), 
- * including token generation, validation, and extraction of user details.
- * 
- * This class is used by the authentication and authorization mechanisms to create and verify JWT tokens.
+ * Вспомогательный класс, предоставляющий методы для работы с JSON Web Tokens (JWT),
+ * включая генерацию токенов, проверку и извлечение данных пользователя
  */
 @Component
 public class JwtUtil {
@@ -32,65 +30,67 @@ public class JwtUtil {
         secretKey = generateSecretKey(secrete);
     }
 
+
     /**
-     * Generates a JWT token for the given user details.
-     *
-     * @param  details  the user details to generate the token for
-     * @return          the generated JWT token
+     * Генерирует JW токен для указанного пользователя.
+     * @param details данные пользователя, содержащие имя и роли
+     * @return сгенерированный JWT токен
      */
     public String generateToken(UserDetails details) {
         return Jwts.builder()
-            .subject(details.getUsername())
-            .claim("role", details.getAuthorities())
-            .issuedAt(new Date())
-            .expiration(new Date(System.currentTimeMillis() + expirationTime))
-            .signWith(secretKey, Jwts.SIG.HS256)
-            .compact();
+                .subject(details.getUsername())
+                .claim("role", details.getAuthorities())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(secretKey, Jwts.SIG.HS256)
+                .compact();
     }
 
+    /**
+     * Генерирует секретный ключ для подписи JWT на основе строки секрета.
+     * @param secrete строковое значение секрета
+     * @return сгенерированный {@link SecretKey}
+     */
     private SecretKey generateSecretKey(String secrete) {
         return Keys.hmacShaKeyFor(secrete.getBytes());
     }
 
     /**
-     * Retrieves the username from a given JWT token.
-     *
-     * @param  token  the JWT token to extract the username from
-     * @return        the username associated with the given token
+     * Извлекает имя пользователя из JW токена.
+     * @param token JW токен
+     * @return имя пользователя, указанное в токене
      */
     public String getUserName(String token) {
         return Jwts.parser()
-            .verifyWith(secretKey)
-            .build()
-            .parseSignedClaims(token)
-            .getPayload()
-            .getSubject();
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
     }
 
     /**
-     * Validates a JWT token against the provided user details.
-     *
-     * @param  token  the JWT token to validate
-     * @param  details  the user details to validate against
-     * @return          true if the token is valid, false otherwise
+     * Проверяет валидность JWT токена.
+     * @param token JW токен
+     * @param details данные пользователя
+     * @return {@code true} если токен валиден, иначе {@code false}
      */
     public boolean validateToken(String token, UserDetails details) {
         return getUserName(token).equals(details.getUsername()) && !tokenExpired(token);
     }
 
     /**
-     * Checks if a given JWT token has expired.
-     *
-     * @param  token  the JWT token to check for expiration
-     * @return        true if the token has expired, false otherwise
+     * Проверяет истек ли срок действия JWT токена.
+     * @param token JW токен
+     * @return {@code true} если токен истёк, иначе {@code false}
      */
     public boolean tokenExpired(String token) {
         return Jwts.parser()
-            .verifyWith(secretKey)
-            .build()
-            .parseSignedClaims(token)
-            .getPayload()
-            .getExpiration()
-            .before(new Date());
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration()
+                .before(new Date());
     }
 }

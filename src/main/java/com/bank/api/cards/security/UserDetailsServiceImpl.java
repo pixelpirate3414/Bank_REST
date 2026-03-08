@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * A custom implementation of the {@link UserDetailsService} interface, responsible for loading user details by username.
- * 
- * This service is used by the Spring Security framework to authenticate users and load their corresponding user details.
+ * Пользовательская реализация интерфейса {@link UserDetailsService}, отвечающая за загрузку сведений о пользователе по имени пользователя.
+ * Этот сервис используется фреймворком Spring Security для аутентификации пользователей и загрузки соответствующих им пользовательских данных.
  */
 @Service
 @RequiredArgsConstructor

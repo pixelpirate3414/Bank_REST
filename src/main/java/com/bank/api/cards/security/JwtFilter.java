@@ -15,11 +15,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * A custom implementation of the {@link OncePerRequestFilter} class, 
- * responsible for authenticating and authorizing incoming HTTP requests using JSON Web Tokens (JWT).
- * 
- * This filter checks for the presence of a valid JWT token in the Authorization header, 
- * and uses it to authenticate and authorize the request.
+ * Пользовательская реализация класса {@link OncePerRequestFilter},
+ * отвечающая за аутентификацию и авторизацию входящих HTTP-запросов с использованием JSON Web Tokens (JWT).
+ * Этот фильтр проверяет наличие действительного JWT-токена в заголовке Authorization,
+ * и использует его для аутентификации и авторизации запроса.
  */
 @Configuration
 @RequiredArgsConstructor

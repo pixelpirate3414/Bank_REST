@@ -10,14 +10,12 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-
 /**
- * A custom implementation of the {@link AuthenticationEntryPoint} interface, 
- * responsible for handling authentication exceptions and returning unauthorized responses.
- * 
- * This class is used by the Spring Security framework to handle situations where a user is not authenticated, 
- * and returns a JSON response with a 401 Unauthorized status code.
- */
+ *  Пользовательская реализация интерфейса {@link AuthenticationEntryPoint},
+ *  отвечающая за обработку исключений аутентификации и возврат ответов о несанкционированном доступе.
+ *  Этот класс используется фреймворком Spring Security для обработки ситуаций, когда пользователь не аутентифицирован,
+ *  и возвращает JSON-ответ с кодом состояния 401 Unauthorized.
+ * */
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
